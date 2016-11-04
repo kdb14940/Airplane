@@ -15,3 +15,8 @@ Functionality
 7. Prints all reserved seats information (seat # and passenger name) - 2
 8. Seat class and preferential seating (ex. 1st class and window) - 2
 9. Additional 4 aisle seats in each row (0 pts  for project without this requirement).
+
+How to Run
+----------
+1. Clone this repo
+2. Compile and run AirlineCompany.java
