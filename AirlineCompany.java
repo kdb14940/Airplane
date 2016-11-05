@@ -16,7 +16,7 @@ public class AirlineCompany {
         System.out.println("Welcome to Java Airlines.");
         while(true){
             System.out.println("Please select what you would like to do:");
-            System.out.println("1. Display Passengers");
+            System.out.println("1. Display Occupancy");
             System.out.println("2. Reserve seats manually");
             System.out.println("3. Reserve seats automatically");
             System.out.println("4. Preferential seating arrangement");
@@ -27,12 +27,13 @@ public class AirlineCompany {
             System.out.println("0. Exit");
             System.out.print("> ");
 
-            int choice = -1;
+            int choice = 0; // allows for loop to restart
             try{
                 choice = in.nextInt();
             } catch (Exception e){
                 System.out.println("Not a choice");
                 in.nextLine();
+                continue;
             }
 
             if (choice == 0)
@@ -40,7 +41,7 @@ public class AirlineCompany {
 
             switch (choice){
                 case 1:
-                    displayPassengers();
+                    displayOccupancy();
                     break;
                 case 2:
                     reserveSeatsManually();
@@ -75,8 +76,17 @@ public class AirlineCompany {
     * (Postcondition: Prints out table of passengers)
     * (Precondition: Airplane is initialized)
     */
-    public static void displayPassengers(){
-        
+    public static void displayOccupancy(){
+        airplane.airplaneSeats[1][2].isVacant = false;
+        for(int row = 0; row < airplane.airplaneSeats[0].length ; row++){
+            for(int column = 0; column < airplane.airplaneSeats.length ; column++){
+                if(airplane.airplaneSeats[column][row].isVacant)
+                    System.out.print("[ ]");
+                else
+                    System.out.print("[x]");
+            }
+            System.out.println();
+        }
     }
 
     // 2
