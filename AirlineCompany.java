@@ -86,7 +86,6 @@ public class AirlineCompany {
         int vacant = airplane.getAirplaneSeats().length * airplane.getAirplaneSeats()[0].length; // gets number of seats in an airplane
         int occupied = 0;
 
-        airplane.getAirplaneSeats()[1][2].isVacant = false;
         System.out.println("Airplane Layout:");
         System.out.print(" ");
         for(int column = 0; column < airplane.getAirplaneSeats().length; column++){
@@ -106,8 +105,7 @@ public class AirlineCompany {
             }
             System.out.println();
         }
-        System.out.format("Seats Vacant: %s | Seats Occupied: %s", vacant, occupied);
-        System.out.println(); // for format
+        System.out.format("Seats Vacant: %s | Seats Occupied: %s\n", vacant, occupied);
         System.out.println(); // to make newline before prompt again
     }
 
@@ -127,24 +125,28 @@ public class AirlineCompany {
         firstName = in.nextLine();
         System.out.print("Please enter your last name: ");
         lastName = in.nextLine();
-        System.out.print("Please enter the seat you would like to reserve, ie. A1: ");
+        System.out.print("Please enter the seat you would like to reserve, ie. 1A: ");
         String userChoice = in.nextLine();
 
         // get input for seat
         try {
-            char rowChar = userChoice.charAt(0);
+            char rowChar;
+
+            if (userChoice.length() == 2){
+                column = Integer.parseInt(userChoice.substring(0,1));
+                rowChar = userChoice.charAt(1);
+            } else if (userChoice.length() == 3){
+                column = Integer.parseInt(userChoice.substring(0,2));
+                rowChar = userChoice.charAt(2);
+            } else{
+                throw new Exception("not valid input");
+            }
+
             if('a' <= rowChar && rowChar <= 'z')
                 rowChar = (char) (rowChar - 32);
             else if (rowChar < 'A' || 'Z' < rowChar)
                 throw new Exception("Not valid row");
             row = rowChar - 64;
-
-            if (userChoice.length() == 2)
-                column = Integer.parseInt(userChoice.substring(1,2));
-            else if (userChoice.length() == 3)
-                column = Integer.parseInt(userChoice.substring(1,3));
-            else
-                throw new Exception("not valid input");
 
             if (column > 12 || column < 1)
                 throw new Exception("not valid input");
@@ -215,11 +217,11 @@ public class AirlineCompany {
     public static void printPassengerInfo(){
         System.out.format("%10s %10s | %4s\n", "Name", "", "Seat");
         for(int i = 0; i < passengers.size(); i++){
-            System.out.format("%10s %10s | %2s%s\n",
+            System.out.format("%10s %10s | %s%s\n",
                     passengers.get(i).getFirstName(),
                     passengers.get(i).getLastName(),
-                    (char)(passengers.get(i).getRow() + 64),
-                    passengers.get(i).getColumn());
+                    passengers.get(i).getColumn(),
+                    (char)(passengers.get(i).getRow() + 64));
         }
         System.out.println();
     }
@@ -231,7 +233,17 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void printReservedSeatsInfo(){
-        
+        System.out.format("%4s | %s\n", "Seat", "Name");
+        for(int row = 0; row < airplane.getAirplaneSeats().length; row++){
+            for(int column = 0; column < airplane.getAirplaneSeats()[0].length; column++){
+                if(!airplane.getAirplaneSeats()[row][column].isVacant)
+                    System.out.format("%3s%1s | %s %s\n",
+                            row + 1,
+                            (char)(column+65),
+                            airplane.getAirplaneSeats()[row][column].getFirstName(),
+                            airplane.getAirplaneSeats()[row][column].getLastName());
+            }
+        }
     }
 
     // 8
