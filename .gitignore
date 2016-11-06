@@ -1,3 +1,5 @@
 tester.java
 Makefile
 *.class
+*.swp
+tags
