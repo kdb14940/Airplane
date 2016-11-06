@@ -5,12 +5,15 @@
  */
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class AirlineCompany {
     private static Airplane airplane;
+    private static ArrayList<Passenger> passengers;
 
     public static void main (String [] args){
         airplane = new Airplane();
+        passengers = new ArrayList<Passenger>();
         Scanner in = new Scanner(System.in);
 
         System.out.println("Welcome to Java Airlines.");
@@ -35,6 +38,8 @@ public class AirlineCompany {
                 in.nextLine();
                 continue;
             }
+
+            System.out.println();
 
             if (choice == 0)
                 break; // kills loop
@@ -72,21 +77,38 @@ public class AirlineCompany {
 
     // 1
     /**
-    * prints out a table of passengers
+    * Prints out a table of passengers
     * (Postcondition: Prints out table of passengers)
     * (Precondition: Airplane is initialized)
     */
     public static void displayOccupancy(){
-        airplane.airplaneSeats[1][2].isVacant = false;
-        for(int row = 0; row < airplane.airplaneSeats[0].length ; row++){
-            for(int column = 0; column < airplane.airplaneSeats.length ; column++){
-                if(airplane.airplaneSeats[column][row].isVacant)
+
+        int vacant = airplane.getAirplaneSeats().length * airplane.getAirplaneSeats()[0].length; // gets number of seats in an airplane
+        int occupied = 0;
+
+        airplane.getAirplaneSeats()[1][2].isVacant = false;
+        System.out.println("Airplane Layout:");
+        System.out.print(" ");
+        for(int column = 0; column < airplane.getAirplaneSeats().length; column++){
+            System.out.format("%3s", column + 1);
+        }
+        System.out.println();
+        for(int row = 0; row < airplane.getAirplaneSeats()[0].length ; row++){
+            System.out.print((char)(row + 65) + " ");
+            for(int column = 0; column < airplane.getAirplaneSeats().length ; column++){
+                if(airplane.getAirplaneSeats()[column][row].isVacant)
                     System.out.print("[ ]");
-                else
+                else {
+                    vacant--;
+                    occupied++;
                     System.out.print("[x]");
+                }
             }
             System.out.println();
         }
+        System.out.format("Seats Vacant: %s | Seats Occupied: %s", vacant, occupied);
+        System.out.println(); // for format
+        System.out.println(); // to make newline before prompt again
     }
 
     // 2
@@ -96,7 +118,51 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void reserveSeatsManually(){
-        
+        String firstName;
+        String lastName;
+        int row;
+        int column;
+        Scanner in = new Scanner(System.in);
+        System.out.print("Please enter your first name: ");
+        firstName = in.nextLine();
+        System.out.print("Please enter your last name: ");
+        lastName = in.nextLine();
+        System.out.print("Please enter the seat you would like to reserve, ie. A1: ");
+        String userChoice = in.nextLine();
+
+        // get input for seat
+        try {
+            char rowChar = userChoice.charAt(0);
+            if('a' <= rowChar && rowChar <= 'z')
+                rowChar = (char) (rowChar - 32);
+            else if (rowChar < 'A' || 'Z' < rowChar)
+                throw new Exception("Not valid row");
+            row = rowChar - 64;
+
+            if (userChoice.length() == 2)
+                column = Integer.parseInt(userChoice.substring(1,2));
+            else if (userChoice.length() == 3)
+                column = Integer.parseInt(userChoice.substring(1,3));
+            else
+                throw new Exception("not valid input");
+
+        } catch(Exception e) {
+            System.out.println("That was not a valid input");
+            System.out.println();
+            return;
+        }
+
+        passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list
+        airplane.setAirplaneSeatName(row, column, firstName, lastName); // adds passenger to 
+
+        // Debugging purposes
+        // System.out.format("%s%s %s %s",
+        //         passengers.get(0).getColumn(),
+        //         passengers.get(0).getRow(),
+        //         passengers.get(0).getFirstName(),
+        //         passengers.get(0).getLastName());
+
+        System.out.println();
     }
 
     // 3
