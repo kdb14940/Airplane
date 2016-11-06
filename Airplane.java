@@ -6,7 +6,7 @@
 
 public class Airplane {
 
-    public final Seat[][] airplaneSeats;
+    private Seat[][] airplaneSeats;
 
     /**
     * Initializes an Airplane
@@ -41,5 +41,26 @@ public class Airplane {
                 airplaneSeats[row][column] = new Seat(row + 1, column + 1, isWindow, isAisle, isMiddle);
             }
         }
+    }
+
+    /**
+    * Returns airplaneSeats
+    * (Postcondition: airplaneSeats is returned)
+    * @return airplaneSeats seats of the airplane
+    * (Precondition: airplaneSeats is initialized)
+    */
+    public Seat[][] getAirplaneSeats(){
+        return airplaneSeats;
+    }
+
+    /**
+    * Sets the name of a passenger
+    * (Postcondition: seats names are set)
+	* @param row row number of passenger
+	* @param column column number of passenger
+    * (Precondition: row, column >= 0 but smaller than 8 and 12)
+    */
+    public void setAirplaneSeatName(int row, int column, String firstName, String lastName){
+        airplaneSeats[row][column].setPassengerName(firstName, lastName);
     }
 }
