@@ -6,8 +6,8 @@
 
 public class Seat {
 
-    public final int row;
-    public final int column; // Position of seat as an integer
+    public final int row; // 0 - 12
+    public final int column; // letters in numerical form. 1-6
     public final boolean isWindow; // is it a window seat?
     public final boolean isAisle; // is it an aisle seat?
     public final boolean isMiddle; // either middle or side seat
@@ -27,15 +27,7 @@ public class Seat {
     */
     public Seat (int row, int column, boolean isWindow, boolean isAisle, boolean isMiddle){
         this.row = row;
-
-        // checker for column
-        // checker will likely go unused because no one can edit this besides Airplane.java
-        if (column >= 'a' && column <= 'z'){
-            this.column = Character.toUpperCase(column);
-        } else {
-            this.column = column;
-        }
-
+        this.column = column;
         this.isWindow = isWindow;
         this.isAisle = isAisle;
         this.isMiddle = isMiddle;
