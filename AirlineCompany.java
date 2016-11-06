@@ -146,14 +146,26 @@ public class AirlineCompany {
             else
                 throw new Exception("not valid input");
 
+            if (column > 12 || column < 1)
+                throw new Exception("not valid input");
+
         } catch(Exception e) {
-            System.out.println("That was not a valid input");
+            System.out.println("That was not a valid input.");
+            System.out.println("Your seat was not reserved.");
             System.out.println();
             return;
         }
 
-        passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list
-        airplane.setAirplaneSeatName(row, column, firstName, lastName); // adds passenger to 
+        if(airplane.getAirplaneSeats()[column-1][row-1].isVacant){
+            passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list of passengers
+            airplane.setAirplaneSeatName(column, row, firstName, lastName); // adds passenger to airplane (sets seat name)
+            System.out.println("Your seat was reserved.\n");
+        } else {
+            System.out.println("The seat is already taken.");
+            System.out.println("Your seat was not reserved.");
+            System.out.println();
+            return;
+        }
 
         // Debugging purposes
         // System.out.format("%s%s %s %s",
@@ -162,7 +174,6 @@ public class AirlineCompany {
         //         passengers.get(0).getFirstName(),
         //         passengers.get(0).getLastName());
 
-        System.out.println();
     }
 
     // 3
@@ -202,7 +213,15 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void printPassengerInfo(){
-        
+        System.out.format("%10s %10s | %4s\n", "Name", "", "Seat");
+        for(int i = 0; i < passengers.size(); i++){
+            System.out.format("%10s %10s | %2s%s\n",
+                    passengers.get(i).getFirstName(),
+                    passengers.get(i).getLastName(),
+                    (char)(passengers.get(i).getRow() + 64),
+                    passengers.get(i).getColumn());
+        }
+        System.out.println();
     }
 
     // 7
