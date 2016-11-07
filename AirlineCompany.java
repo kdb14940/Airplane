@@ -87,14 +87,20 @@ public class AirlineCompany {
         int occupied = 0;
 
         System.out.println("Airplane Layout:");
+        // System.out.print("   ");
+        System.out.println("  1st Class    2nd Class");
         System.out.print(" ");
         for(int column = 0; column < airplane.getAirplaneSeats().length; column++){
+            if(column == 3)
+                System.out.print("    ");
             System.out.format("%3s", column + 1);
         }
         System.out.println();
-        for(int row = 0; row < airplane.getAirplaneSeats()[0].length ; row++){
+        for(int row = 0; row < airplane.getAirplaneSeats()[0].length; row++){
             System.out.print((char)(row + 65) + " ");
-            for(int column = 0; column < airplane.getAirplaneSeats().length ; column++){
+            for(int column = 0; column < airplane.getAirplaneSeats().length; column++){
+                if(column == 3)
+                    System.out.print("    ");
                 if(airplane.getAirplaneSeats()[column][row].isVacant)
                     System.out.print("[ ]");
                 else {
