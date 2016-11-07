@@ -202,9 +202,91 @@ public class AirlineCompany {
     /**
     * Cancel seats
     * (Postcondition: Cancels seats)
-    * (Precondition: Airplane is initialized)
+    * (Precondition: Airplane is initialized and selection is either 1 or 2)
     */
     public static void cancelSeats(){
+        System.out.println("To cancel a seat by name, Enter 1");
+        System.out.println("To cancel a seat by seat number, Enter 2");
+        Scanner input = new Scanner(System.in);
+        int selection = input.nextInt();
+        
+        // Cancellation for name
+        if (selection == 1){
+        	Scanner nameIn = new Scanner(System.in);
+        	System.out.print("Enter your first name: ");
+        	String firstName = nameIn.nextLine();
+        	System.out.print("Enter your last name: ");
+        	String lastName = nameIn.nextLine();
+        	boolean check1 = false; // Check to see if passenger is on the list
+        	
+        	for (int i = 0; i < passengers.size(); i++){
+        		Passenger temp = passengers.get(i);
+        			if(temp.getFirstName().equals(firstName) && temp.getLastName().equals(lastName)){
+        				int column = temp.getColumn();
+        				int row = temp.getRow();
+        				airplane.setAirplaneSeatVacant(column,row);
+        				passengers.remove(i);// removes passenger from the list
+        				System.out.println("Your seat has been successfully canceled");
+        				check1 = true; // Passenger is on the list
+        			}
+        		}
+        		if (check1 == false){
+        			System.out.println("There is no passenger with that name."); // I am sure there is a much more efficient way to do this
+	
+        	}
+        }
+        	//cancellation for seat number
+        	else if(selection == 2){
+        	Scanner seatIn = new Scanner(System.in);
+        	System.out.print("Enter your seat number: ");
+        	String userChoice = seatIn.nextLine();
+        	int column;//column of seat
+        	int row;//row of seat
+        	boolean check2 = false;// Check to see if passenger is on the list
+        	try {
+                char rowChar;
+
+                if (userChoice.length() == 2){
+                    column = Integer.parseInt(userChoice.substring(0,1));
+                    rowChar = userChoice.charAt(1);
+                } else if (userChoice.length() == 3){
+                    column = Integer.parseInt(userChoice.substring(0,2));
+                    rowChar = userChoice.charAt(2);
+                } else{
+                    throw new Exception("not valid input");
+                }
+
+                if('a' <= rowChar && rowChar <= 'z')
+                    rowChar = (char) (rowChar - 32);
+                else if (rowChar < 'A' || 'Z' < rowChar)
+                    throw new Exception("Not valid row");
+                row = rowChar - 64;
+
+                if (column > 12 || column < 1)
+                    throw new Exception("not valid input");
+
+            } catch(Exception e) {
+                System.out.println("That was not a valid input.");
+                System.out.println("No seat was canceled.");
+                System.out.println();
+                return;
+            		}
+        	airplane.setAirplaneSeatVacant(column,row); //reset the seat back to vacant
+        	
+        	for (int i = 0; i < passengers.size(); i++){
+        		Passenger temp = passengers.get(i);
+        			if (temp.getRow() == row && temp.getColumn() == column){
+        				passengers.remove(i); // removes the passenger from the list
+        				System.out.println("Your seat has been successfully canceled");
+        				check2 = true; //Passenger is on the list
+        			}
+        		}
+        		if(check2 == false){
+        			System.out.println("The seat " + userChoice + " is already vacant");
+        	}
+        } 
+ 
+    }
         
     }
 
