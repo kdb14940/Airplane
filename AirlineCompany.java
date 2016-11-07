@@ -4,6 +4,7 @@
  * @version 11/04/16
  */
 
+import java.lang.Math;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -15,6 +16,8 @@ public class AirlineCompany {
         airplane = new Airplane();
         passengers = new ArrayList<Passenger>();
         Scanner in = new Scanner(System.in);
+
+        randomFillAirplane();
 
         System.out.println("Welcome to Java Airlines.");
         while(true){
@@ -96,7 +99,10 @@ public class AirlineCompany {
             System.out.format("%3s", column + 1);
         }
         System.out.println();
+        // TODO row and column are swapped here uh oh
         for(int row = 0; row < airplane.getAirplaneSeats()[0].length; row++){
+            if(row == 2 || row == 6)
+                System.out.println();
             System.out.print((char)(row + 65) + " ");
             for(int column = 0; column < airplane.getAirplaneSeats().length; column++){
                 if(column == 3)
@@ -190,6 +196,7 @@ public class AirlineCompany {
     * (Postcondition: Reserves seats)
     * (Precondition: Airplane is initialized)
     */
+    // appears to be unnecessary
     public static void reserveSeatsAutomatically(){
 
     }
@@ -201,7 +208,20 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void preferentialSeating(){
-
+        Scanner in = new Scanner(System.in);
+        System.out.println("To reserve seats for a group, enter 1.");
+        System.out.println("To reserve seats for an individual, enter 2.");
+        System.out.print("> ");
+        int selection;
+        try {
+            selection = in.nextInt();
+            if(selection != 1 && selection != 2)
+                throw new Exception("Not a valid choice");
+        } catch(Exception e) {
+            System.out.println("That was not a valid choice.\n");
+            return;
+        }
+        // TODO
     }
 
     // 5
@@ -235,7 +255,7 @@ public class AirlineCompany {
 
         	for (int i = 0; i < passengers.size(); i++){
         		Passenger temp = passengers.get(i);
-                if(temp.getFirstName().equals(firstName) && temp.getLastName().equals(lastName)){
+                if(temp.getFirstName().equalsIgnoreCase(firstName) && temp.getLastName().equalsIgnoreCase(lastName)){
                     int column = temp.getColumn();
                     int row = temp.getRow();
                     airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
@@ -348,6 +368,41 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void reserveSeatsSpecial(){
+
+    }
+
+    /**
+    * Fill the airplane up with seats randomly
+    * (Postcondition: fills the airplane with seats)
+    * (Precondition: none)
+    */
+    public static void randomFillAirplane(){
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter the number of seats to be filled: ");
+        int seatsToFill;
+
+        try {
+            seatsToFill = in.nextInt();
+            if(seatsToFill > 96 || 0 > seatsToFill)
+                throw new Exception("Not a valid choice");
+        } catch(Exception e) {
+            System.out.println("That was not a valid choice.\n");
+            return;
+        }
+
+        while(seatsToFill > 0){
+            int currentSeat = (int)Math.floor(Math.random()*96);
+            int column = currentSeat / 8;
+            int row = currentSeat % 8;
+            if(airplane.getAirplaneSeats()[column][row].isVacant){
+                seatsToFill--;
+                String firstName = "John " + seatsToFill;
+                String lastName = "Doe";
+                passengers.add(new Passenger(firstName, lastName, row, column));
+                airplane.setAirplaneSeatName(column + 1, row + 1, firstName, lastName);
+            }
+            // else do nothing
+        }
 
     }
 }
