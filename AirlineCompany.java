@@ -142,9 +142,9 @@ public class AirlineCompany {
                 throw new Exception("not valid input");
             }
 
-            if('a' <= rowChar && rowChar <= 'z')
+            if('a' <= rowChar && rowChar <= 'h')
                 rowChar = (char) (rowChar - 32);
-            else if (rowChar < 'A' || 'Z' < rowChar)
+            else if (rowChar < 'A' || 'H' < rowChar)
                 throw new Exception("Not valid row");
             row = rowChar - 64;
 
@@ -185,7 +185,7 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void reserveSeatsAutomatically(){
-        
+
     }
 
     // 4
@@ -195,7 +195,7 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void preferentialSeating(){
-        
+
     }
 
     // 5
@@ -207,9 +207,10 @@ public class AirlineCompany {
     public static void cancelSeats(){
         System.out.println("To cancel a seat by name, Enter 1");
         System.out.println("To cancel a seat by seat number, Enter 2");
+        System.out.print("> ");
         Scanner input = new Scanner(System.in);
         int selection = input.nextInt();
-        
+
         // Cancellation for name
         if (selection == 1){
         	Scanner nameIn = new Scanner(System.in);
@@ -217,33 +218,33 @@ public class AirlineCompany {
         	String firstName = nameIn.nextLine();
         	System.out.print("Enter your last name: ");
         	String lastName = nameIn.nextLine();
-        	boolean check1 = false; // Check to see if passenger is on the list
-        	
+
         	for (int i = 0; i < passengers.size(); i++){
         		Passenger temp = passengers.get(i);
-        			if(temp.getFirstName().equals(firstName) && temp.getLastName().equals(lastName)){
-        				int column = temp.getColumn();
-        				int row = temp.getRow();
-        				airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
-        				passengers.remove(i);// removes passenger from the list
-        				System.out.println("Your seat has been successfully canceled");
-        				check1 = true; // Passenger is on the list
-        			}
-        		}
-        		if (check1 == false){
-        			System.out.println("There is no passenger with that name."); // I am sure there is a much more efficient way to do this
-	
-        	}
+                if(temp.getFirstName().equals(firstName) && temp.getLastName().equals(lastName)){
+                    int column = temp.getColumn();
+                    int row = temp.getRow();
+                    airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
+                    passengers.remove(i);// removes passenger from the list
+                    System.out.println("Your seat has been successfully canceled");
+                    System.out.println();
+                    return;
+                }
+            }
+            // if reaches this point, then there was no match
+            System.out.println("There is no passenger with that name.");
+            System.out.println();
+            return;
         }
-        	//cancellation for seat number
-        	else if(selection == 2){
-        	Scanner seatIn = new Scanner(System.in);
-        	System.out.print("Enter your seat number: ");
-        	String userChoice = seatIn.nextLine();
-        	int column;//column of seat
-        	int row;//row of seat
-        	boolean check2 = false;// Check to see if passenger is on the list
-        	try {
+
+        //cancellation for seat number
+        else if(selection == 2){
+            Scanner seatIn = new Scanner(System.in);
+            System.out.print("Enter your seat number: ");
+            String userChoice = seatIn.nextLine();
+            int column;//column of seat
+            int row;//row of seat
+            try {
                 char rowChar;
 
                 if (userChoice.length() == 2){
@@ -256,9 +257,9 @@ public class AirlineCompany {
                     throw new Exception("not valid input");
                 }
 
-                if('a' <= rowChar && rowChar <= 'z')
+                if('a' <= rowChar && rowChar <= 'h')
                     rowChar = (char) (rowChar - 32);
-                else if (rowChar < 'A' || 'Z' < rowChar)
+                else if (rowChar < 'A' || 'H' < rowChar)
                     throw new Exception("Not valid row");
                 row = rowChar - 64;
 
@@ -267,25 +268,25 @@ public class AirlineCompany {
 
             } catch(Exception e) {
                 System.out.println("That was not a valid input.");
-                System.out.println("No seat was canceled.");
+                System.out.println("No seat was cancelled.");
                 System.out.println();
                 return;
-            		}
+            }
             airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
-        	
-        	for (int i = 0; i < passengers.size(); i++){
-        		Passenger temp = passengers.get(i);
-        			if (temp.getRow() == row && temp.getColumn() == column){
-        				passengers.remove(i); // removes the passenger from the list
-        				System.out.println("Your seat has been successfully canceled");
-        				check2 = true; //Passenger is on the list
-        			}
-        		}
-        		if(check2 == false){
-        			System.out.println("The seat " + userChoice + " is already vacant");
-        	}
-        } 
- 
+
+            for (int i = 0; i < passengers.size(); i++){
+                Passenger temp = passengers.get(i);
+                if (temp.getRow() == row && temp.getColumn() == column){
+                    passengers.remove(i); // removes the passenger from the list
+                    System.out.println("Your seat has been successfully cancelled");
+                    System.out.println();
+                    return;
+                }
+            }
+            System.out.println("The seat " + userChoice + " is already vacant");
+            System.out.println();
+            return;
+        }
     }
 
     // 6
@@ -333,6 +334,6 @@ public class AirlineCompany {
     * (Precondition: Airplane is initialized)
     */
     public static void reserveSeatsSpecial(){
-        
+
     }
 }
