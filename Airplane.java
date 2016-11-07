@@ -64,4 +64,15 @@ public class Airplane {
         airplaneSeats[column-1][row-1].setPassengerName(firstName, lastName);
         airplaneSeats[column-1][row-1].isVacant = false;
     }
+	
+     /**
+     * Resets a seat to vacant
+     * (PostCondition: Seat will be reset to vacant)
+     * @param column the column of the seat
+     * @param row the row of the seat
+     * (Precondition: row, column >= 0 but smaller than 8 and 12)
+     */
+    public void setAirplaneSeatVacant(int column, int row){
+    	airplaneSeats[column-1][row-1].isVacant = true;
+    }
 }
