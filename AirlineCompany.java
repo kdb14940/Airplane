@@ -209,7 +209,15 @@ public class AirlineCompany {
         System.out.println("To cancel a seat by seat number, Enter 2");
         System.out.print("> ");
         Scanner input = new Scanner(System.in);
-        int selection = input.nextInt();
+        int selection;
+        try {
+            selection = input.nextInt();
+            if(selection != 1 && selection != 2)
+                throw new Exception("Not a valid choice");
+        } catch(Exception e) {
+            System.out.println("That was not a valid choice.\n");
+            return;
+        }
 
         // Cancellation for name
         if (selection == 1){
