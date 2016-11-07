@@ -224,7 +224,7 @@ public class AirlineCompany {
         			if(temp.getFirstName().equals(firstName) && temp.getLastName().equals(lastName)){
         				int column = temp.getColumn();
         				int row = temp.getRow();
-        				airplane.setAirplaneSeatVacant(column,row);
+        				airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
         				passengers.remove(i);// removes passenger from the list
         				System.out.println("Your seat has been successfully canceled");
         				check1 = true; // Passenger is on the list
@@ -271,7 +271,7 @@ public class AirlineCompany {
                 System.out.println();
                 return;
             		}
-        	airplane.setAirplaneSeatVacant(column,row); //reset the seat back to vacant
+            airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
         	
         	for (int i = 0; i < passengers.size(); i++){
         		Passenger temp = passengers.get(i);
@@ -286,8 +286,6 @@ public class AirlineCompany {
         	}
         } 
  
-    }
-        
     }
 
     // 6
