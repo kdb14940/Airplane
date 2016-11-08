@@ -223,6 +223,28 @@ public class AirlineCompany {
             return;
         }
         // TODO
+          if(selection == 1){
+            System.out.println("Would you like first class seats?");
+            System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+            int classChoice = in.nextInt();    
+        
+            System.out.println("Would you like window seats?");
+            System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+            int windowChoice = in.nextInt();
+            
+            int middleChoice = 0;
+            int sideChoice = 0;
+            if(windowChoice != 1){
+                System.out.println("Would you like middle seats?");
+                System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+                middleChoice = in.nextInt();
+                if(middleChoice != 1){
+                     System.out.println("Would you like side seats?");
+                     System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+                     sideChoice = in.nextInt();
+              }
+          }
+       }
 
     }
 
