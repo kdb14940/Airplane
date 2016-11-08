@@ -99,15 +99,14 @@ public class AirlineCompany {
             System.out.format("%3s", column + 1);
         }
         System.out.println();
-        // TODO row and column are swapped here uh oh
-        for(int row = 0; row < airplane.getAirplaneSeats()[0].length; row++){
-            if(row == 2 || row == 6)
+        for(int column = 0; column < airplane.getAirplaneSeats()[0].length; column++){
+            if(column == 2 || column == 6)
                 System.out.println();
-            System.out.print((char)(row + 65) + " ");
-            for(int column = 0; column < airplane.getAirplaneSeats().length; column++){
-                if(column == 3)
+            System.out.print((char)(column + 65) + " ");
+            for(int row = 0; row < airplane.getAirplaneSeats().length; row++){
+                if(row == 3)
                     System.out.print("    ");
-                if(airplane.getAirplaneSeats()[column][row].isVacant)
+                if(airplane.getAirplaneSeats()[row][column].isVacant)
                     System.out.print("[ ]");
                 else {
                     vacant--;
@@ -170,7 +169,9 @@ public class AirlineCompany {
             return;
         }
 
-        if(airplane.getAirplaneSeats()[column-1][row-1].isVacant){
+        row -= 1; // off by one
+        column -= 1; // off by one
+        if(airplane.getAirplaneSeats()[column][row].isVacant){
             passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list of passengers
             airplane.setAirplaneSeatName(column, row, firstName, lastName); // adds passenger to airplane (sets seat name)
             System.out.println("Your seat was reserved.\n");
@@ -222,6 +223,7 @@ public class AirlineCompany {
             return;
         }
         // TODO
+
     }
 
     // 5
@@ -335,8 +337,8 @@ public class AirlineCompany {
             System.out.format("%10s %10s | %s%s\n",
                     passengers.get(i).getFirstName(),
                     passengers.get(i).getLastName(),
-                    passengers.get(i).getColumn(),
-                    (char)(passengers.get(i).getRow() + 64));
+                    passengers.get(i).getColumn() + 1,
+                    (char)(passengers.get(i).getRow() + 65));
         }
         System.out.println();
     }
@@ -359,6 +361,7 @@ public class AirlineCompany {
                             airplane.getAirplaneSeats()[row][column].getLastName());
             }
         }
+        System.out.println();
     }
 
     // 8
@@ -399,7 +402,7 @@ public class AirlineCompany {
                 String firstName = "John " + seatsToFill;
                 String lastName = "Doe";
                 passengers.add(new Passenger(firstName, lastName, row, column));
-                airplane.setAirplaneSeatName(column + 1, row + 1, firstName, lastName);
+                airplane.setAirplaneSeatName(column, row, firstName, lastName);
             }
             // else do nothing
         }

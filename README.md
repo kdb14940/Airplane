@@ -16,6 +16,7 @@ Functionality
 | Prints all passenger information (name and seat #)                    | 2               | ✓    |
 | Prints all reserved seats information (seat # and passenger name)     | 2               | ✓    |
 | Seat class and preferential seating (ex. 1st class and window)        | 2               | X    |
+| Random filler                                                         | -               | ✓    |
 
 How to Run
 ----------
