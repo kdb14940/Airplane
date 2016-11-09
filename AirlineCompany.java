@@ -218,10 +218,12 @@ public class AirlineCompany {
     */
     public static void preferentialSeating(){
         Scanner in = new Scanner(System.in);
+        int selection;
+
         System.out.println("To reserve seats for an individual, enter 1.");
         System.out.println("To reserve seats for a group, enter 2.");
         System.out.print("> ");
-        int selection;
+
         try {
             selection = in.nextInt();
             if(selection != 1 && selection != 2)
@@ -233,16 +235,18 @@ public class AirlineCompany {
             in.nextLine(); // clear stdin \n character
         }
 
-        // 1 is yes, 0 is no, 2 is no preference
-        int windowChoice = 2;
-        int classChoice = 2;
-        int middleChoice = 2;
-        String firstName = ""; // should never run into a case where
-        String lastName = ""; //  it's not initialized
         boolean[][] availableSeats = availableSeats(); // rows = 12, columns = 8
 
         switch(selection){
             case 1:
+
+                // 1 is yes, 0 is no, 2 is no preference
+                int windowChoice = 2;
+                int classChoice = 2;
+                int middleChoice = 2;
+                String firstName; // should never run into a case where
+                String lastName; //  it's not initialized
+
                 // get user input
                 try{
                     System.out.print("Please enter your first name: ");
@@ -330,7 +334,24 @@ public class AirlineCompany {
                 }
 
                 break;
-            case 2:
+
+            case 2: // group seating
+
+                int numberOfSeats;
+
+                // get user input
+                try{
+                    System.out.print("Please enter the number of people in your party: ");
+                    numberOfSeats = in.nextInt();
+                    if(numberOfSeats > 16) // if more than 2 rows
+                        throw new Exception("Exceeded max input");
+                } catch(Exception e){
+                    System.out.println("That was not valid input.");
+                    System.out.println("No seats were reserved.");
+                    return;
+                }
+
+                // first match one row then match two rows
                 break;
             default: // should never reach this case.
                 return;
