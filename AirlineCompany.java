@@ -127,6 +127,7 @@ public class AirlineCompany {
     * (Postcondition: Reserves seats)
     * (Precondition: Airplane is initialized)
     */
+    // TODO row and column are swapped!!
     public static void reserveSeatsManually(){
         String firstName;
         String lastName;
@@ -172,7 +173,7 @@ public class AirlineCompany {
 
         row -= 1; // off by one
         column -= 1; // off by one
-        reserveSeats(firstName, lastName, row, column);
+        reserveSeats(firstName, lastName, column, row);
 
     }
 
@@ -186,9 +187,9 @@ public class AirlineCompany {
     * (Precondition: row, column > 0, < 12 and 8. firstName and lastName are not empty strings)
     */
     public static void reserveSeats(String firstName, String lastName, int row, int column){ // actual stored rows and columns
-        if(airplane.getAirplaneSeats()[column][row].isVacant){
-            passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list of passengers
-            airplane.setAirplaneSeatName(column, row, firstName, lastName); // adds passenger to airplane (sets seat name)
+        if(airplane.getAirplaneSeats()[row][column].isVacant){
+            passengers.add(new Passenger(firstName, lastName, column, row)); // adds new passenger to list of passengers
+            airplane.setAirplaneSeatName(row, column, firstName, lastName); // adds passenger to airplane (sets seat name)
             System.out.println("Your seat was reserved.\n");
         } else {
             System.out.println("The seat is already taken.");
@@ -236,101 +237,105 @@ public class AirlineCompany {
         int windowChoice = 2;
         int classChoice = 2;
         int middleChoice = 2;
-        String firstName;
-        String lastName;
+        String firstName = ""; // should never run into a case where
+        String lastName = ""; //  it's not initialized
         boolean[][] availableSeats = availableSeats(); // rows = 12, columns = 8
 
-        if(selection == 1) {
-            try{
-                System.out.print("Please enter your first name: ");
-                firstName = in.nextLine();
+        switch(selection){
+            case 1:
+                // get user input
+                try{
+                    System.out.print("Please enter your first name: ");
+                    firstName = in.nextLine();
 
-                System.out.print("Please enter your last name: ");
-                lastName = in.nextLine();
+                    System.out.print("Please enter your last name: ");
+                    lastName = in.nextLine();
 
-                System.out.println("Would you like first class seats?");
-                System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
-                classChoice = in.nextInt();
+                    System.out.println("Would you like first class seats?");
+                    System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+                    classChoice = in.nextInt();
 
-                System.out.println("Would you like window seats?");
-                System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
-                windowChoice = in.nextInt();
+                    System.out.println("Would you like window seats?");
+                    System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+                    windowChoice = in.nextInt();
 
-                if(windowChoice != 1){
-                    System.out.println("Would you like side or middle seats?");
-                    System.out.print("Enter 1 for middle, 0 for side, or 2 for no preference: ");
-                    middleChoice = in.nextInt();
+                    if(windowChoice != 1){
+                        System.out.println("Would you like side or middle seats?");
+                        System.out.print("Enter 1 for middle, 0 for side, or 2 for no preference: ");
+                        middleChoice = in.nextInt();
+                    }
+                } catch(Exception e) {
+                    System.out.println("That was not valid input");
+                    return;
                 }
-            } catch(Exception e) {
-                System.out.println("That was not valid input");
-                return;
-            }
-        // } else if(selection == 2) { // group TODO
-        // }
-        } else { // group
-            return;
-        }
 
-        if (selection == 1){
-            if(windowChoice == 1){
-                for(int column = 1; column <= 6; column++){
+                // find a seat based on user choices // Individual seating
+                if(windowChoice == 1){
+                    for(int column = 1; column <= 6; column++){
+                        for(int row = 0; row < availableSeats.length; row++){
+                            availableSeats[row][column] = false;
+                        }
+                    }
+                } else if(windowChoice == 0) {
                     for(int row = 0; row < availableSeats.length; row++){
-                        availableSeats[row][column] = false;
+                        availableSeats[row][0] = false;
+                        availableSeats[row][7] = false;
                     }
-                }
-            } else if(windowChoice == 0) {
-                for(int row = 0; row < availableSeats.length; row++){
-                    availableSeats[row][0] = false;
-                    availableSeats[row][7] = false;
-                }
-            } // 2 do nothing
+                } // 2 do nothing
 
-            if(classChoice == 0){ // second class
-                for(int row = 0; row < 4; row++){
-                    for(int column = 0; column < availableSeats[0].length; column++){
-                        availableSeats[row][column] = false;
+                if(classChoice == 0){ // second class
+                    for(int row = 0; row < 4; row++){
+                        for(int column = 0; column < availableSeats[0].length; column++){
+                            availableSeats[row][column] = false;
+                        }
                     }
-                }
-            } else if(classChoice == 1) { // first class
-                for(int row = 4; row < availableSeats.length; row++){
-                    for(int column = 0; column < availableSeats[0].length; column++){
-                        availableSeats[row][column] = false;
+                } else if(classChoice == 1) { // first class
+                    for(int row = 4; row < availableSeats.length; row++){
+                        for(int column = 0; column < availableSeats[0].length; column++){
+                            availableSeats[row][column] = false;
+                        }
                     }
-                }
-            } // 2 do nothing
+                } // 2 do nothing
 
-            if(middleChoice == 0){ // side seats
-                for(int row = 0; row < availableSeats.length; row++){
-                    availableSeats[row][2] = false;
-                    availableSeats[row][3] = false;
-                    availableSeats[row][4] = false;
-                    availableSeats[row][5] = false;
-                }
-            } else if(middleChoice == 1) { // middle seats
-                for(int row = 0; row < availableSeats.length; row++){
-                    availableSeats[row][0] = false;
-                    availableSeats[row][1] = false;
-                    availableSeats[row][6] = false;
-                    availableSeats[row][7] = false;
-                }
-            } // else do nothing
-
-            for(int column = 0; column < availableSeats[0].length; column++){
-                for(int row = 0; row < availableSeats.length; row++){
-
-                    // if(availableSeats[row][column]) // used for testing purposes
-                    //     System.out.print("[ ]");
-                    // else
-                    //     System.out.print("[x]");
-
-                    if (availableSeats[row][column]){
-                        reserveSeats(firstName, lastName, row, column);
-                        return;
+                if(middleChoice == 0){ // side seats
+                    for(int row = 0; row < availableSeats.length; row++){
+                        availableSeats[row][2] = false;
+                        availableSeats[row][3] = false;
+                        availableSeats[row][4] = false;
+                        availableSeats[row][5] = false;
                     }
+                } else if(middleChoice == 1) { // middle seats
+                    for(int row = 0; row < availableSeats.length; row++){
+                        availableSeats[row][0] = false;
+                        availableSeats[row][1] = false;
+                        availableSeats[row][6] = false;
+                        availableSeats[row][7] = false;
+                    }
+                } // else do nothing
+
+                for(int column = 0; column < availableSeats[0].length; column++){
+                    for(int row = 0; row < availableSeats.length; row++){
+
+                        // if(availableSeats[row][column]) // used for testing purposes
+                        //     System.out.print("[ ]");
+                        // else
+                        //     System.out.print("[x]");
+
+                        if (availableSeats[row][column]){
+                            reserveSeats(firstName, lastName, row, column);
+                            return;
+                        }
+                    }
+                    System.out.println();
                 }
-                System.out.println();
-            }
+
+                break;
+            case 2:
+                break;
+            default: // should never reach this case.
+                return;
         }
+
     }
 
     /**
