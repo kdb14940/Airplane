@@ -255,16 +255,16 @@ public class AirlineCompany {
                     System.out.print("Please enter your last name: ");
                     lastName = in.nextLine();
 
-                    System.out.println("Would you like first class seats?");
+                    System.out.println("Would you like a first class seat?");
                     System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
                     classChoice = in.nextInt();
 
-                    System.out.println("Would you like window seats?");
+                    System.out.println("Would you like a window seat?");
                     System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
                     windowChoice = in.nextInt();
 
                     if(windowChoice != 1){
-                        System.out.println("Would you like side or middle seats?");
+                        System.out.println("Would you like a side or middle seat?");
                         System.out.print("Enter 1 for middle, 0 for side, or 2 for no preference: ");
                         middleChoice = in.nextInt();
                     }
@@ -408,7 +408,7 @@ public class AirlineCompany {
                 if(temp.getFirstName().equalsIgnoreCase(firstName) && temp.getLastName().equalsIgnoreCase(lastName)){
                     int column = temp.getColumn();
                     int row = temp.getRow();
-                    airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
+                    airplane.getAirplaneSeats()[column][row].isVacant = true;
                     passengers.remove(i);// removes passenger from the list
                     System.out.println("Your seat has been successfully canceled");
                     System.out.println();
@@ -456,7 +456,7 @@ public class AirlineCompany {
                 System.out.println();
                 return;
             }
-            airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
+            airplane.getAirplaneSeats()[column][row].isVacant = true;
 
             for (int i = 0; i < passengers.size(); i++){
                 Passenger temp = passengers.get(i);
