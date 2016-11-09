@@ -50,10 +50,10 @@ public class AirlineCompany {
 
             switch (choice){
                 case 1:
-                    displayOccupancy();
+                    DisplayOccupancy.displayOccupancy(airplane);
                     break;
                 case 2:
-                    reserveSeatsManually();
+                    ReserveSeats.reserveSeatsManually(airplane, passengers);
                     break;
                 case 3:
                     reserveSeatsAutomatically();
@@ -79,125 +79,8 @@ public class AirlineCompany {
         System.out.println("Thanks for flying Java!");
     }
 
-    // 1
-    /**
-    * Prints out a table of passengers
-    * (Postcondition: Prints out table of passengers)
-    * (Precondition: Airplane is initialized)
-    */
-    public static void displayOccupancy(){
-
-        int vacant = airplane.getAirplaneSeats().length * airplane.getAirplaneSeats()[0].length; // gets number of seats in an airplane
-        int occupied = 0;
-
-        System.out.println("Airplane Layout:");
-        // System.out.print("   ");
-        System.out.println("  1st Class       2nd Class");
-        System.out.print(" ");
-        for(int column = 0; column < airplane.getAirplaneSeats().length; column++){
-            if(column == 4)
-                System.out.print("    ");
-            System.out.format("%3s", column + 1);
-        }
-        System.out.println();
-        for(int column = 0; column < airplane.getAirplaneSeats()[0].length; column++){
-            if(column == 2 || column == 6)
-                System.out.println();
-            System.out.print((char)(column + 65) + " ");
-            for(int row = 0; row < airplane.getAirplaneSeats().length; row++){
-                if(row == 4)
-                    System.out.print("    ");
-                if(airplane.getAirplaneSeats()[row][column].isVacant)
-                    System.out.print("[ ]");
-                else {
-                    vacant--;
-                    occupied++;
-                    System.out.print("[x]");
-                }
-            }
-            System.out.println();
-        }
-        System.out.format("Seats Vacant: %s | Seats Occupied: %s\n", vacant, occupied);
-        System.out.println(); // to make newline before prompt again
-    }
-
     // 2
-    /**
-    * Reserve seats manually
-    * (Postcondition: Reserves seats)
-    * (Precondition: Airplane is initialized)
-    */
-    // TODO row and column are swapped!!
-    public static void reserveSeatsManually(){
-        String firstName;
-        String lastName;
-        int row;
-        int column;
-        Scanner in = new Scanner(System.in);
-        System.out.print("Please enter your first name: ");
-        firstName = in.nextLine();
-        System.out.print("Please enter your last name: ");
-        lastName = in.nextLine();
-        System.out.print("Please enter the seat you would like to reserve, ie. 1A: ");
-        String userChoice = in.nextLine();
 
-        // get input for seat
-        try {
-            char rowChar;
-
-            if (userChoice.length() == 2){
-                column = Integer.parseInt(userChoice.substring(0,1));
-                rowChar = userChoice.charAt(1);
-            } else if (userChoice.length() == 3){
-                column = Integer.parseInt(userChoice.substring(0,2));
-                rowChar = userChoice.charAt(2);
-            } else{
-                throw new Exception("not valid input");
-            }
-
-            if('a' <= rowChar && rowChar <= 'h')
-                rowChar = (char) (rowChar - 32);
-            else if (rowChar < 'A' || 'H' < rowChar)
-                throw new Exception("Not valid row");
-            row = rowChar - 64;
-
-            if (column > 12 || column < 1)
-                throw new Exception("not valid input");
-
-        } catch(Exception e) {
-            System.out.println("That was not a valid input.");
-            System.out.println("Your seat was not reserved.");
-            System.out.println();
-            return;
-        }
-
-        row -= 1; // off by one
-        column -= 1; // off by one
-        reserveSeats(firstName, lastName, column, row);
-
-    }
-
-    /**
-    * Seats a person
-    * (Postcondition: none)
-	* @param firstName first name of the person
-	* @param lastName last name of the person
-	* @param row row of the seat, as stored
-	* @param column column of the seat, as stored
-    * (Precondition: row, column > 0, < 12 and 8. firstName and lastName are not empty strings)
-    */
-    public static void reserveSeats(String firstName, String lastName, int row, int column){ // actual stored rows and columns
-        if(airplane.getAirplaneSeats()[row][column].isVacant){
-            passengers.add(new Passenger(firstName, lastName, column, row)); // adds new passenger to list of passengers
-            airplane.setAirplaneSeatName(row, column, firstName, lastName); // adds passenger to airplane (sets seat name)
-            System.out.println("Your seat was reserved.\n");
-        } else {
-            System.out.println("The seat is already taken.");
-            System.out.println("Your seat was not reserved.");
-            System.out.println();
-            return;
-        }
-    }
 
     // 3
     /**
@@ -326,7 +209,7 @@ public class AirlineCompany {
                         //     System.out.print("[x]");
 
                         if (availableSeats[row][column]){
-                            reserveSeats(firstName, lastName, row, column);
+                            ReserveSeats.reserveSeats(airplane, passengers, firstName, lastName, row, column);
                             return;
                         }
                     }
@@ -337,7 +220,7 @@ public class AirlineCompany {
 
             case 2: // group seating
 
-                int numberOfSeats;
+                int numberOfSeats; // number of people in party
 
                 // get user input
                 try{
@@ -351,13 +234,101 @@ public class AirlineCompany {
                     return;
                 }
 
-                // first match one row then match two rows
+                if(numberOfSeats <= 8){ // can seat all in one row
+                    int[] seatsFound = hasSeats(availableSeats, numberOfSeats);
+                    if(seatsFound[0] == 1){
+                        //reserve seats
+                        //TODO
+                        return;
+                    } // else go try two rows
+                }
+
+                // try seating in two rows split evenly
+                // PUT THIS INTO ONE METHOD 
+                int firstHalf = (numberOfSeats + 1) / 2; // larger of the two
+                int secondHalf = numberOfSeats / 2; // actually ok because 0.5 -> 0 and 1 -> 1
+                int currentRow = 0;
+
+                //while(true){
+                //    int[] firstRowSeats = hasSeats(availableSeats, firstHalf, currentRow);
+                //    if(firstRowSeats[0] == 0)
+                //        break; // none found
+                //    if(row != 0){
+                //        for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
+                //            if(! availableSeats[row-1][column])
+                //                break;
+                //        }
+                //        return true;
+                //    }
+                //    if(row != 11){
+                //        for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
+                //            if(! availableSeats[row+1][column])
+                //                break;
+                //        }
+                //        return true;
+                //    }
+                //    if(currentRow >= 12)
+                //        break;
+                //    break;
+                //}
+                //return false;
+                ////TO HERE
+
                 break;
+
             default: // should never reach this case.
                 return;
         }
 
     }
+
+    /**
+    * Finds required length of seats together
+    * (Postcondition: boolean[][] and numberOfSeats > 0)
+    * @param availableSeats array of available seats
+    * @param numberOfSeats the number of seats requested
+    * @return seatsFound int[], 1/0 (true, false), row, column
+    * (Precondition: returns an int[] of 1/0, row, column)
+    */
+    public static int[] hasSeats(boolean[][] availableSeats, int numberOfSeats){
+        for(int row = 0; row < availableSeats.length; row++){
+            eachColumn: for(int column = 0; column < availableSeats[0].length - numberOfSeats + 1; column++){
+                for(int currentColumn = 0; currentColumn < numberOfSeats; currentColumn++){
+                    if(! availableSeats[row][column + currentColumn])
+                        continue eachColumn;
+                }
+                System.out.format("Found at %s %s \n", row, column);
+                return new int[]{1, row, column};
+            }
+        }
+        return new int[]{0, 0, 0};
+    }
+
+    // same as hasSeats with the exception of stating a starting row
+    public static int[] hasSeats(boolean[][] availableSeats, int numberOfSeats, int startRow){
+        for(int row = startRow; row < availableSeats.length; row++){
+            eachColumn: for(int column = 0; column < availableSeats[0].length - numberOfSeats + 1; column++){
+                for(int currentColumn = 0; currentColumn < numberOfSeats; currentColumn++){
+                    if(! availableSeats[row][column + currentColumn])
+                        continue eachColumn;
+                }
+                System.out.format("Found at %s %s \n", row, column);
+                return new int[]{1, row, column};
+            }
+        }
+        return new int[]{0, 0, 0};
+    }
+
+    //TODO
+
+    /**
+    * 
+    * (Postcondition: )
+    * (Precondition: )
+    */
+    // public int[] findSeatsTogether(){
+        
+    // }
 
     /**
     * Returns a boolean array of available seats
