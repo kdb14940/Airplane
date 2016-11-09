@@ -375,7 +375,7 @@ public class AirlineCompany {
     }
 
     // 5
-    /**
+       /**
     * Cancel seats
     * (Postcondition: Cancels seats)
     * (Precondition: Airplane is initialized and selection is either 1 or 2)
@@ -408,7 +408,7 @@ public class AirlineCompany {
                 if(temp.getFirstName().equalsIgnoreCase(firstName) && temp.getLastName().equalsIgnoreCase(lastName)){
                     int column = temp.getColumn();
                     int row = temp.getRow();
-                    airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
+                    airplane.getAirplaneSeats()[column][row].isVacant = true;
                     passengers.remove(i);// removes passenger from the list
                     System.out.println("Your seat has been successfully canceled");
                     System.out.println();
@@ -456,7 +456,9 @@ public class AirlineCompany {
                 System.out.println();
                 return;
             }
-            airplane.getAirplaneSeats()[column-1][row-1].isVacant = true;
+            column--; // off by one error
+            row--; // off by one error 
+            airplane.getAirplaneSeats()[column][row].isVacant = true;
 
             for (int i = 0; i < passengers.size(); i++){
                 Passenger temp = passengers.get(i);
