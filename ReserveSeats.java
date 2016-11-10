@@ -107,100 +107,7 @@ public class ReserveSeats{
 
         switch(selection){
             case 1:
-
-                // 1 is yes, 0 is no, 2 is no preference
-                int windowChoice = 2;
-                int classChoice = 2;
-                int middleChoice = 2;
-                String firstName; // should never run into a case where
-                String lastName; //  it's not initialized
-
-                // get user input
-                try{
-                    System.out.print("Please enter your first name: ");
-                    firstName = in.nextLine();
-
-                    System.out.print("Please enter your last name: ");
-                    lastName = in.nextLine();
-
-                    System.out.println("Would you like a first class seat?");
-                    System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
-                    classChoice = in.nextInt();
-
-                    System.out.println("Would you like a window seat?");
-                    System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
-                    windowChoice = in.nextInt();
-
-                    if(windowChoice != 1){
-                        System.out.println("Would you like a side or middle seat?");
-                        System.out.print("Enter 1 for middle, 0 for side, or 2 for no preference: ");
-                        middleChoice = in.nextInt();
-                    }
-                } catch(Exception e) {
-                    System.out.println("That was not valid input");
-                    return;
-                }
-
-                // find a seat based on user choices // Individual seating
-                if(windowChoice == 1){
-                    for(int column = 1; column <= 6; column++){
-                        for(int row = 0; row < availableSeats.length; row++){
-                            availableSeats[row][column] = false;
-                        }
-                    }
-                } else if(windowChoice == 0) {
-                    for(int row = 0; row < availableSeats.length; row++){
-                        availableSeats[row][0] = false;
-                        availableSeats[row][7] = false;
-                    }
-                } // 2 do nothing
-
-                if(classChoice == 0){ // second class
-                    for(int row = 0; row < 4; row++){
-                        for(int column = 0; column < availableSeats[0].length; column++){
-                            availableSeats[row][column] = false;
-                        }
-                    }
-                } else if(classChoice == 1) { // first class
-                    for(int row = 4; row < availableSeats.length; row++){
-                        for(int column = 0; column < availableSeats[0].length; column++){
-                            availableSeats[row][column] = false;
-                        }
-                    }
-                } // 2 do nothing
-
-                if(middleChoice == 0){ // side seats
-                    for(int row = 0; row < availableSeats.length; row++){
-                        availableSeats[row][2] = false;
-                        availableSeats[row][3] = false;
-                        availableSeats[row][4] = false;
-                        availableSeats[row][5] = false;
-                    }
-                } else if(middleChoice == 1) { // middle seats
-                    for(int row = 0; row < availableSeats.length; row++){
-                        availableSeats[row][0] = false;
-                        availableSeats[row][1] = false;
-                        availableSeats[row][6] = false;
-                        availableSeats[row][7] = false;
-                    }
-                } // else do nothing
-
-                for(int column = 0; column < availableSeats[0].length; column++){
-                    for(int row = 0; row < availableSeats.length; row++){
-
-                        // if(availableSeats[row][column]) // used for testing purposes
-                        //     System.out.print("[ ]");
-                        // else
-                        //     System.out.print("[x]");
-
-                        if (availableSeats[row][column]){
-                            ReserveSeats.reserveSeats(airplane, passengers, firstName, lastName, row, column);
-                            return;
-                        }
-                    }
-                    System.out.println();
-                }
-
+                individualPreferentialSeating(airplane, passengers);
                 break;
 
             case 2: // group seating
@@ -268,6 +175,112 @@ public class ReserveSeats{
     }
 
     /**
+     * Gets a seat based on individual preferences
+     * (Postcondition: none)
+     * @param airplane the airplane
+     * @param passengers the ArrayList of passengers
+     * (Precondition: none)
+    */
+    private static void individualPreferentialSeating(Airplane airplane, ArrayList<Passenger> passengers){
+
+        Scanner in = new Scanner(System.in);
+        boolean[][] availableSeats = availableSeats(airplane); // rows = 12, columns = 8
+
+        // 1 is yes, 0 is no, 2 is no preference
+        int windowChoice = 2;
+        int classChoice = 2;
+        int middleChoice = 2;
+        String firstName; // should never run into a case where
+        String lastName; //  it's not initialized
+
+        // get user input
+        try{
+            System.out.print("Please enter your first name: ");
+            firstName = in.nextLine();
+
+            System.out.print("Please enter your last name: ");
+            lastName = in.nextLine();
+
+            System.out.println("Would you like a first class seat?");
+            System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+            classChoice = in.nextInt();
+
+            System.out.println("Would you like a window seat?");
+            System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+            windowChoice = in.nextInt();
+
+            if(windowChoice != 1){
+                System.out.println("Would you like a side or middle seat?");
+                System.out.print("Enter 1 for middle, 0 for side, or 2 for no preference: ");
+                middleChoice = in.nextInt();
+            }
+        } catch(Exception e) {
+            System.out.println("That was not valid input");
+            return;
+        }
+
+        // find a seat based on user choices // Individual seating
+        if(windowChoice == 1){
+            for(int column = 1; column <= 6; column++){
+                for(int row = 0; row < availableSeats.length; row++){
+                    availableSeats[row][column] = false;
+                }
+            }
+        } else if(windowChoice == 0) {
+            for(int row = 0; row < availableSeats.length; row++){
+                availableSeats[row][0] = false;
+                availableSeats[row][7] = false;
+            }
+        } // 2 do nothing
+
+        if(classChoice == 0){ // second class
+            for(int row = 0; row < 4; row++){
+                for(int column = 0; column < availableSeats[0].length; column++){
+                    availableSeats[row][column] = false;
+                }
+            }
+        } else if(classChoice == 1) { // first class
+            for(int row = 4; row < availableSeats.length; row++){
+                for(int column = 0; column < availableSeats[0].length; column++){
+                    availableSeats[row][column] = false;
+                }
+            }
+        } // 2 do nothing
+
+        if(middleChoice == 0){ // side seats
+            for(int row = 0; row < availableSeats.length; row++){
+                availableSeats[row][2] = false;
+                availableSeats[row][3] = false;
+                availableSeats[row][4] = false;
+                availableSeats[row][5] = false;
+            }
+        } else if(middleChoice == 1) { // middle seats
+            for(int row = 0; row < availableSeats.length; row++){
+                availableSeats[row][0] = false;
+                availableSeats[row][1] = false;
+                availableSeats[row][6] = false;
+                availableSeats[row][7] = false;
+            }
+        } // else do nothing
+
+        for(int column = 0; column < availableSeats[0].length; column++){
+            for(int row = 0; row < availableSeats.length; row++){
+
+                // if(availableSeats[row][column]) // used for testing purposes
+                //     System.out.print("[ ]");
+                // else
+                //     System.out.print("[x]");
+
+                if (availableSeats[row][column]){
+                    ReserveSeats.reserveSeats(airplane, passengers, firstName, lastName, row, column);
+                    return;
+                }
+            }
+            System.out.println();
+        }
+
+    }
+    /**
     * Finds required length of seats together
     * (Postcondition: boolean[][] and numberOfSeats > 0)
     * @param availableSeats array of available seats
@@ -323,22 +336,22 @@ public class ReserveSeats{
      * Returns a list of all passenger's names in a preferential seating group
      * (PreCondition: groupSize > 0)
      * @param groupSize number of passengers in a preferential seating group
-     * @return prefNameList 2D array of the first and last names of the passengers
+     * @return groupNameList 2D array of the first and last names of the passengers
      * (PostCondition: The array will accomodate enough passengers for the group)
      */
     public static String[][] getGroupNames(int groupSize){
         Scanner in = new Scanner(System.in);
         String[][] groupNameList = new String [2][groupSize];//row 1: first name, row 2: last name
-        for(int i =0; i < groupSize; i++){
+        for(int i = 0; i < groupSize; i++){
             for (int k = 0; k < 2; k++)
             {
-                if( k == 0){
-                System.out.println ("Enter the first name of passenger " + (i+1));
-               }
-               if( k == 1){
-                System.out.println ("Enter the last name of passenger " + (i+1));
-               }
-               groupNameList[k][i] = in.nextLine();
+                if(k == 0){
+                    System.out.println ("Enter the first name of passenger " + (i+1));
+                }
+                if(k == 1){
+                    System.out.println ("Enter the last name of passenger " + (i+1));
+                }
+                groupNameList[k][i] = in.nextLine();
             }
         }
         return groupNameList;
