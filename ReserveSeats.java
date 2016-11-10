@@ -4,9 +4,11 @@ import java.util.ArrayList;
 public class ReserveSeats{
 
     /**
-    * Reserve seats manually
-    * (Postcondition: Reserves seats)
-    * (Precondition: Airplane is initialized)
+     * Reserve seats manually
+     * (Postcondition: Reserves seats)
+     * @param airplane the airplane
+     * @param passengers the ArrayList of passengers
+     * (Precondition: Airplane is initialized)
     */
     public static void reserveSeatsManually(Airplane airplane, ArrayList<Passenger> passengers){
         String firstName;
@@ -60,6 +62,8 @@ public class ReserveSeats{
     /**
     * Seats a person
     * (Postcondition: none)
+    * @param airplane the airplane
+    * @param passengers the ArrayList of passengers
 	* @param firstName first name of the person
 	* @param lastName last name of the person
 	* @param row row of the seat, as stored
@@ -82,6 +86,8 @@ public class ReserveSeats{
     /**
     * Reserve seats with preferences
     * (Postcondition: Reserves seats)
+    * @param airplane the airplane
+    * @param passengers the ArrayList of passengers
     * (Precondition: Airplane is initialized)
     */
     public static void preferentialSeating(Airplane airplane, ArrayList<Passenger> passengers){
@@ -320,6 +326,7 @@ public class ReserveSeats{
     /**
     * Returns a boolean array of available seats on an Airplane
     * (Postcondition: returns a boolean array)
+    * @param airplane the airplane
     * (Precondition: none)
     */
     public static boolean[][] availableSeats(Airplane airplane){

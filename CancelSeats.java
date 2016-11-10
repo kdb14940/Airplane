@@ -6,6 +6,8 @@ public class CancelSeats {
     /**
     * Cancel seats
     * (Postcondition: Cancels seats)
+    * @param airplane the airplane
+    * @param passengers the ArrayList of passengers
     * (Precondition: Airplane is initialized and selection is either 1 or 2)
     */
     public static void cancelSeats(Airplane airplane, ArrayList<Passenger> passengers){

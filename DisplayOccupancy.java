@@ -1,6 +1,7 @@
 /**
  * Prints out a table of passengers
  * (Postcondition: Prints out table of passengers)
+ * @param airplane the airplane
  * (Precondition: Airplane is initialized)
  */
 public class DisplayOccupancy{

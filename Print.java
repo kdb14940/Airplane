@@ -4,7 +4,8 @@ public class Print {
     /**
     * Prints passenger info
     * (Postcondition: Prints passenger info)
-    * (Precondition: Airplane is initialized)
+    * @param passengers the ArrayList of passengers
+    * (Precondition: passengers is initialized)
     */
     public static void printPassengerInfo(ArrayList<Passenger> passengers){
         System.out.format("%10s %10s | %4s\n", "Name", "", "Seat");
@@ -21,6 +22,7 @@ public class Print {
     /**
     * Prints reserved seats info
     * (Postcondition: Prints reserved seats info)
+    * @param airplane the airplane
     * (Precondition: Airplane is initialized)
     */
     public static void printReservedSeatsInfo(Airplane airplane){
