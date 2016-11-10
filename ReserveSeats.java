@@ -8,7 +8,6 @@ public class ReserveSeats{
     * (Postcondition: Reserves seats)
     * (Precondition: Airplane is initialized)
     */
-    // TODO row and column are swapped!!
     public static void reserveSeatsManually(Airplane airplane, ArrayList<Passenger> passengers){
         String firstName;
         String lastName;
@@ -24,25 +23,25 @@ public class ReserveSeats{
 
         // get input for seat
         try {
-            char rowChar;
+            char columnChar;
 
             if (userChoice.length() == 2){
-                column = Integer.parseInt(userChoice.substring(0,1));
-                rowChar = userChoice.charAt(1);
+                row = Integer.parseInt(userChoice.substring(0,1));
+                columnChar = userChoice.charAt(1);
             } else if (userChoice.length() == 3){
-                column = Integer.parseInt(userChoice.substring(0,2));
-                rowChar = userChoice.charAt(2);
+                row = Integer.parseInt(userChoice.substring(0,2));
+                columnChar = userChoice.charAt(2);
             } else{
                 throw new Exception("not valid input");
             }
 
-            if('a' <= rowChar && rowChar <= 'h')
-                rowChar = (char) (rowChar - 32);
-            else if (rowChar < 'A' || 'H' < rowChar)
+            if('a' <= columnChar && columnChar <= 'h')
+                columnChar = (char) (columnChar - 32);
+            else if (columnChar < 'A' || 'H' < columnChar)
                 throw new Exception("Not valid row");
-            row = rowChar - 64;
+            column = columnChar - 64;
 
-            if (column > 12 || column < 1)
+            if (row > 12 || row < 1)
                 throw new Exception("not valid input");
 
         } catch(Exception e) {
@@ -54,7 +53,7 @@ public class ReserveSeats{
 
         row -= 1; // off by one
         column -= 1; // off by one
-        reserveSeats(airplane, passengers, firstName, lastName, column, row);
+        reserveSeats(airplane, passengers, firstName, lastName, row, column);
 
     }
 
@@ -306,7 +305,7 @@ public class ReserveSeats{
     }
 
     /**
-    * Returns a boolean array of available seats
+    * Returns a boolean array of available seats on an Airplane
     * (Postcondition: returns a boolean array)
     * (Precondition: none)
     */
