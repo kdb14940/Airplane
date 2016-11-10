@@ -60,8 +60,8 @@ public class Airplane {
 	* @param column column number of passenger
     * (Precondition: row, column >= 0 but smaller than 8 and 12)
     */
-    public void setAirplaneSeatName(int column, int row, String firstName, String lastName){
-        airplaneSeats[column][row].setPassengerName(firstName, lastName);
-        airplaneSeats[column][row].isVacant = false;
+    public void setAirplaneSeatName(int row, int column, String firstName, String lastName){
+        airplaneSeats[row][column].setPassengerName(firstName, lastName);
+        airplaneSeats[row][column].isVacant = false;
     }
 }

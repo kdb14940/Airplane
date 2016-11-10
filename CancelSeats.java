@@ -38,7 +38,7 @@ public class CancelSeats {
                 if(temp.getFirstName().equalsIgnoreCase(firstName) && temp.getLastName().equalsIgnoreCase(lastName)){
                     int column = temp.getColumn();
                     int row = temp.getRow();
-                    airplane.getAirplaneSeats()[column][row].isVacant = true;
+                    airplane.getAirplaneSeats()[row][column].isVacant = true;
                     passengers.remove(i);// removes passenger from the list
                     System.out.println("Your seat has been successfully canceled");
                     System.out.println();
@@ -88,7 +88,7 @@ public class CancelSeats {
             }
             column--; // off by one error
             row--;
-            airplane.getAirplaneSeats()[column][row].isVacant = true;
+            airplane.getAirplaneSeats()[row][column].isVacant = true;
 
             for (int i = 0; i < passengers.size(); i++){
                 Passenger temp = passengers.get(i);
