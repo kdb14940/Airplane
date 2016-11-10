@@ -72,7 +72,6 @@ public class ReserveSeats{
     */
     public static void reserveSeats(Airplane airplane, ArrayList<Passenger> passengers, String firstName, String lastName, int row, int column){ // actual stored rows and columns
         if(airplane.getAirplaneSeats()[row][column].isVacant){
-            Passenger add = new Passenger(firstName, lastName, row, column);
             passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list of passengers
             airplane.setAirplaneSeatName(row, column, firstName, lastName); // adds passenger to airplane (sets seat name)
             System.out.println("Your seat was reserved.\n");
