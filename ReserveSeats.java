@@ -318,5 +318,29 @@ public class ReserveSeats{
         }
         return seats;
     }
-
+	
+     /**
+     * Returns a list of all passenger's names in a preferential seating group
+     * (PreCondition: groupSize > 0)
+     * @param groupSize number of passengers in a preferential seating group
+     * @return prefNameList 2D array of the first and last names of the passengers
+     * (PostCondition: The array will accomodate enough passengers for the group)
+     */
+    public static String[][] getPrefSeatNames(int groupSize){
+        Scanner in = new Scanner(System.in);
+        String[][] prefNameList = new String [2][groupSize];//row 1: first name, row 2: last name
+        for(int i =0; i < groupSize; i++){
+            for (int k = 0; k < 2; k++)
+            {
+                if( k == 0){
+                System.out.println ("Enter the first name of passenger " + (i+1));
+               }
+               if( k == 1){
+                System.out.println ("Enter the last name of passenger " + (i+1));
+               }
+               prefNameList[k][i] = in.nextLine();
+            }
+        }
+        return prefNameList;
+    }
 }
