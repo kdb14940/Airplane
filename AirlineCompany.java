@@ -427,6 +427,8 @@ public class AirlineCompany {
                 System.out.println();
                 return;
             }
+            column--; // off by one error
+            row--;
             airplane.getAirplaneSeats()[column][row].isVacant = true;
 
             for (int i = 0; i < passengers.size(); i++){
