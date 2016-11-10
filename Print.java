@@ -13,8 +13,8 @@ public class Print {
             System.out.format("%10s %10s | %s%s\n",
                     passengers.get(i).getFirstName(),
                     passengers.get(i).getLastName(),
-                    passengers.get(i).getColumn() + 1,
-                    (char)(passengers.get(i).getRow() + 65));
+                    passengers.get(i).getRow() + 1,
+                    (char)(passengers.get(i).getColumn() + 65));
         }
         System.out.println();
     }

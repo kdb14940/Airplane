@@ -56,26 +56,26 @@ public class CancelSeats {
             Scanner seatIn = new Scanner(System.in);
             System.out.print("Enter your seat number: ");
             String userChoice = seatIn.nextLine();
-            int column;//column of seat
             int row;//row of seat
+            int column;//column of seat
             try {
-                char rowChar;
+                char columnChar;
 
                 if (userChoice.length() == 2){
-                    column = Integer.parseInt(userChoice.substring(0,1));
-                    rowChar = userChoice.charAt(1);
+                    row = Integer.parseInt(userChoice.substring(0,1));
+                    columnChar = userChoice.charAt(1);
                 } else if (userChoice.length() == 3){
-                    column = Integer.parseInt(userChoice.substring(0,2));
-                    rowChar = userChoice.charAt(2);
+                    row = Integer.parseInt(userChoice.substring(0,2));
+                    columnChar = userChoice.charAt(2);
                 } else{
                     throw new Exception("not valid input");
                 }
 
-                if('a' <= rowChar && rowChar <= 'h')
-                    rowChar = (char) (rowChar - 32);
-                else if (rowChar < 'A' || 'H' < rowChar)
+                if('a' <= columnChar && columnChar <= 'h')
+                    columnChar = (char) (columnChar - 32);
+                else if (columnChar < 'A' || 'H' < columnChar)
                     throw new Exception("Not valid row");
-                row = rowChar - 64;
+                column = columnChar - 64;
 
                 if (column > 12 || column < 1)
                     throw new Exception("not valid input");

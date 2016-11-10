@@ -87,12 +87,12 @@ public class ReserveSeats{
         if(airplane.getAirplaneSeats()[row][column].isVacant){
             passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list of passengers
             airplane.setAirplaneSeatName(row, column, firstName, lastName); // adds passenger to airplane (sets seat name)
-            System.out.println("Your seat was reserved.\n");
-        } else {
             if(output){
-                System.out.println("The seat is already taken.");
-                System.out.println("Your seat was not reserved.");
+                System.out.println("Your seat was reserved.\n");
             }
+        } else {
+            System.out.println("The seat is already taken.");
+            System.out.println("Your seat was not reserved.");
             System.out.println();
             return;
         }
@@ -277,23 +277,20 @@ public class ReserveSeats{
             // 0/1, row, column
             int[] seatsFound = hasSeats(availableSeats, numberOfSeats);
             if(seatsFound[0] == 1){
-                int rowStart = seatsFound[1];
-                int column = seatsFound[2];
+                int row = seatsFound[1];
+                int columnStart = seatsFound[2];
                 String[][] names = getGroupNames(numberOfSeats);
                 for(int i = 0; i < names[0].length; i++){ // TODO
                     String firstName = names[0][i];
                     String lastName = names[1][i];
-                    // System.out.format("%s %s", firstName, lastName);
-                    reserveSeats(airplane, passengers, firstName, lastName, (rowStart + i), column, false);
+                    reserveSeats(airplane, passengers, firstName, lastName, row, (columnStart + i), false);
                 }
-                //reserve seats
-                //TODO
+                System.out.println("Seats reserved.\n");
                 return;
-            } // else go try two rows
+            }
         }
 
         // try seating in two rows split evenly
-        // PUT THIS INTO ONE METHOD 
         int firstHalf = (numberOfSeats + 1) / 2; // larger of the two
         int secondHalf = numberOfSeats / 2; // actually ok because 0.5 -> 0 and 1 -> 1
         int currentRow = 0;
@@ -323,6 +320,8 @@ public class ReserveSeats{
         //return false;
         ////TO HERE
 
+        System.out.println("No seats found.");
+
     }
 
     /**
@@ -340,7 +339,6 @@ public class ReserveSeats{
                     if(! availableSeats[row][column + currentColumn])
                         continue eachColumn;
                 }
-                System.out.format("Found at %s %s \n", row, column);
                 return new int[]{1, row, column};
             }
         }
@@ -355,7 +353,6 @@ public class ReserveSeats{
                     if(! availableSeats[row][column + currentColumn])
                         continue eachColumn;
                 }
-                System.out.format("Found at %s %s \n", row, column);
                 return new int[]{1, row, column};
             }
         }
@@ -389,9 +386,9 @@ public class ReserveSeats{
         Scanner in = new Scanner(System.in);
         String[][] groupNameList = new String [2][groupSize];//row 1: first name, row 2: last name
         for(int i = 0; i < groupSize; i++){
-            System.out.print("Enter the first name of passenger " + (i+1));
+            System.out.format("Enter the first name of passenger %s: ", (i+1));
             groupNameList[0][i] = in.nextLine();
-            System.out.print("Enter the last name of passenger " + (i+1));
+            System.out.format("Enter the last name of passenger %s: ", (i+1));
             groupNameList[1][i] = in.nextLine();
         }
         return groupNameList;
