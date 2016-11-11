@@ -260,6 +260,7 @@ public class ReserveSeats{
         Scanner in = new Scanner(System.in);
         boolean[][] availableSeats = availableSeats(airplane); // rows = 12, columns = 8
         int numberOfSeats; // number of people in party
+        int classChoice; // 0 is no preference, 1 is first class, 2 is second
 
         // get user input
         try{
@@ -280,48 +281,104 @@ public class ReserveSeats{
                 int row = seatsFound[1];
                 int columnStart = seatsFound[2];
                 String[][] names = getGroupNames(numberOfSeats);
-                for(int i = 0; i < names[0].length; i++){ // TODO
+                for(int i = 0; i < names[0].length; i++){
                     String firstName = names[0][i];
                     String lastName = names[1][i];
                     reserveSeats(airplane, passengers, firstName, lastName, row, (columnStart + i), false);
                 }
                 System.out.println("Seats reserved.\n");
                 return;
+            } else {
+                return;
             }
         }
 
-        // try seating in two rows split evenly
-        int firstHalf = (numberOfSeats + 1) / 2; // larger of the two
-        int secondHalf = numberOfSeats / 2; // actually ok because 0.5 -> 0 and 1 -> 1
-        int currentRow = 0;
+        if(numberOfSeats <= 16){ // two rows
+        }
 
-        //while(true){
-        //    int[] firstRowSeats = hasSeats(availableSeats, firstHalf, currentRow);
-        //    if(firstRowSeats[0] == 0)
-        //        break; // none found
-        //    if(row != 0){
-        //        for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
-        //            if(! availableSeats[row-1][column])
-        //                break;
-        //        }
-        //        return true;
-        //    }
-        //    if(row != 11){
-        //        for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
-        //            if(! availableSeats[row+1][column])
-        //                break;
-        //        }
-        //        return true;
-        //    }
-        //    if(currentRow >= 12)
-        //        break;
-        //    break;
-        //}
-        //return false;
-        ////TO HERE
+    }
 
-        System.out.println("No seats found.");
+    /**
+    * 
+    * (Postcondition: )
+    * (Precondition: )
+    */
+    // public static boolean findTwoRowSeats(boolean[][] availableSeats, int numberOfSeats){
 
+    //     // try seating in two rows split evenly
+    //     int[] firstRowSeats;
+    //     for(int i = 0; i < 8; i++){
+    //         firstRowSeats = hasSeats(availableSeats, firstHalf, currentRow);
+    //         if(firstRowSeats[0] == 1)
+    //             break;
+    //     }
+    //     if(firstRowSeats[0] == 0){
+    //         break;
+    //     }
+    //     int firstHalf = (numberOfSeats + 1) / 2; // larger of the two
+    //     int secondHalf = numberOfSeats / 2; // actually ok because 0.5 -> 0 and 1 -> 1
+    //     int currentRow = 0;
+
+    //     while(true){
+    //         if(firstRowSeats[0] == 0)
+    //             break; // none found
+    //         // search for row after given row
+    //         if(row != 0){ // check row after current
+    //             // next row, row number, column range
+    //             findSeatsNear(true, firstRowSeats[1] + 1, firstRowSeats[2], firstRowSeats[2] + secondHalf); // TODO
+    //             for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
+    //                 if(! availableSeats[row-1][column])
+    //                     break;
+    //             }
+    //             return;
+    //         }
+    //         if(row != 11){ // check row before current
+    //             for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
+    //                 if(! availableSeats[row+1][column])
+    //                     break;
+    //             }
+    //             return;
+    //         }
+    //         if(currentRow >= 12)
+    //             break;
+    //         break;
+    //     }
+    //     System.out.println("No seats found.");
+    //     return false;
+    // }
+
+    /**
+    * Finds seats before or after a given row
+    * (Postcondition: the seat array will be populated if a match is found. If not, it will be blank)
+    * (Precondition: )
+    */
+    // boolean[][] reservedSeats = new boolean[13][8]; TODO add in caller method. Last row is to check if current loop is working
+    public static boolean[][] findSeatsNear(boolean[][] availableSeats, int columnStart, int columnEnd, int row, int numberOfSeats, boolean[][] reservedSeats){
+    // boolean[][] reservedSeats = new boolean[12][8];
+        // find first sequence of blanks.
+        int matchedSeats = 0;
+        int newColumnStart = 0;
+        int newColumnEnd = 0;
+
+        for(int column = 0; column < 8; column++){ // CURRENTLY HERE
+            if(availableSeats[row][column]){
+                matchedSeats++;
+            }
+            if((!availableSeats[row][column] || (column == 8 && matchedSeats != 0)) &&
+                    column - matchedSeats <= columnStart &&
+                    column >= columnEnd){
+                numberOfSeats -= matchedSeats;
+                if(findSeatsNear(availableSeats, rowStart, rowEnd, row++, numberOfSeats, reservedSeats).length != 0){
+                    return reservedSeats;
+                }
+                matchedSeats = 0;
+            }
+        }
+    // delete the number of blanks from numberRemaining
+    // store newRow, newStart
+    // overloaded method for no rowEnds
+
+    return new boolean[0][0]; // TODO fix 
     }
 
     /**
@@ -355,6 +412,32 @@ public class ReserveSeats{
                 }
                 return new int[]{1, row, column};
             }
+        }
+        return new int[]{0, 0, 0};
+    }
+
+    // match seats in only one row
+    public static int[] hasSeats(boolean[][] availableSeats, int numberOfSeats, int row, int startColumn){
+        if(startColumn + numberOfSeats < 12){
+            eachColumn: for(int column = startColumn; column < availableSeats[0].length - numberOfSeats + 1; column++){
+                for(int currentColumn = 0; currentColumn < numberOfSeats; currentColumn++){
+                    if(! availableSeats[row][column + currentColumn])
+                        continue eachColumn;
+                }
+                return new int[]{1, row, column};
+            }
+        return new int[]{0, 0, 0};
+        }
+
+        if(startColumn - numberOfSeats > 0){
+            eachColumn: for(int column = startColumn; column < availableSeats[0].length - numberOfSeats + 1; column++){
+                for(int currentColumn = 0; currentColumn < numberOfSeats; currentColumn++){
+                    if(! availableSeats[row][column - currentColumn])
+                        continue eachColumn;
+                }
+                return new int[]{1, row, column};
+            }
+        return new int[]{0, 0, 0};
         }
         return new int[]{0, 0, 0};
     }
