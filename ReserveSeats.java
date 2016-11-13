@@ -266,7 +266,7 @@ public class ReserveSeats{
         try{
             System.out.print("Please enter the number of people in your party: ");
             numberOfSeats = in.nextInt();
-            if(numberOfSeats > 16) // if more than 2 rows
+            if(numberOfSeats > 96) // if more than 2 rows
                 throw new Exception("Exceeded max input");
         } catch(Exception e){
             System.out.println("That was not valid input.");
@@ -274,111 +274,120 @@ public class ReserveSeats{
             return;
         }
 
-        if(numberOfSeats <= 8){ // can seat all in one row
-            // 0/1, row, column
-            int[] seatsFound = hasSeats(availableSeats, numberOfSeats);
-            if(seatsFound[0] == 1){
-                int row = seatsFound[1];
-                int columnStart = seatsFound[2];
-                String[][] names = getGroupNames(numberOfSeats);
-                for(int i = 0; i < names[0].length; i++){
-                    String firstName = names[0][i];
-                    String lastName = names[1][i];
-                    reserveSeats(airplane, passengers, firstName, lastName, row, (columnStart + i), false);
+        int[] seatsFound = findSeatsGroup(availableSeats, numberOfSeats, 0, 4);
+
+        if(seatsFound[0] != -1){
+            int row = seatsFound[0];
+            int column = seatsFound[1];
+            int direction = seatsFound[2];
+            // System.out.format("%s %s", row, column);
+            String[][] names = getGroupNames(numberOfSeats);
+            for(int i = 0; i < numberOfSeats; i++){
+                // System.out.format("%s %s\n", row, column);
+                String firstName = names[0][i];
+                String lastName = names[1][i];
+                reserveSeats(airplane, passengers, firstName, lastName, row, column, false);
+
+                // row and column logic
+                if(column == 7 && direction == 1){
+                    row -= 1;
+                    direction = -1;
+                } else if (column == 0 && direction == -1){
+                    row -= 1;
+                    direction = 1;
+                } else {
+                    column += direction;
                 }
-                System.out.println("Seats reserved.\n");
-                return;
-            } else {
-                return;
             }
+            System.out.println("Seats reserved.\n");
+            return;
+        } else {
+            System.out.println("No seats found");
+            return;
         }
 
-        if(numberOfSeats <= 16){ // two rows
-        }
-
+        // check for all possibilities
+        // for(int row = 0; row < 12; row++){
+        //     for(int size = 1; size <= 8; size++){
+        //         int numberOfRemainingSeats = numberOfSeats - size;
+        //         int[] seatsFound = hasSeats(availableSeats, size);
+        //         boolean[][] reservedSeats = new boolean[12][8];
+        //         if(seatsFound[0] == 1){
+        //             boolean[][] foundSeats = findSeatsNear(availableSeats,
+        //                     seatsFound[2],
+        //                     seatsFound[2] + size,
+        //                     row,
+        //                     numberOfRemainingSeats,
+        //                     reservedSeats);
+        //             // if(foundSeats.size != 0){
+        //             //     return 
+        //             // }
+        //         }
+        //     }
+        // }
     }
 
     /**
     * 
-    * (Postcondition: )
-    * (Precondition: )
     */
-    // public static boolean findTwoRowSeats(boolean[][] availableSeats, int numberOfSeats){
-
-    //     // try seating in two rows split evenly
-    //     int[] firstRowSeats;
-    //     for(int i = 0; i < 8; i++){
-    //         firstRowSeats = hasSeats(availableSeats, firstHalf, currentRow);
-    //         if(firstRowSeats[0] == 1)
-    //             break;
-    //     }
-    //     if(firstRowSeats[0] == 0){
-    //         break;
-    //     }
-    //     int firstHalf = (numberOfSeats + 1) / 2; // larger of the two
-    //     int secondHalf = numberOfSeats / 2; // actually ok because 0.5 -> 0 and 1 -> 1
-    //     int currentRow = 0;
-
-    //     while(true){
-    //         if(firstRowSeats[0] == 0)
-    //             break; // none found
-    //         // search for row after given row
-    //         if(row != 0){ // check row after current
-    //             // next row, row number, column range
-    //             findSeatsNear(true, firstRowSeats[1] + 1, firstRowSeats[2], firstRowSeats[2] + secondHalf); // TODO
-    //             for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
-    //                 if(! availableSeats[row-1][column])
-    //                     break;
-    //             }
-    //             return;
-    //         }
-    //         if(row != 11){ // check row before current
-    //             for(int column = firstRowSeats[2]; column < firstRowSeats[2] + secondHalf; column++){
-    //                 if(! availableSeats[row+1][column])
-    //                     break;
-    //             }
-    //             return;
-    //         }
-    //         if(currentRow >= 12)
-    //             break;
-    //         break;
-    //     }
-    //     System.out.println("No seats found.");
-    //     return false;
-    // }
-
-    /**
-    * Finds seats before or after a given row
-    * (Postcondition: the seat array will be populated if a match is found. If not, it will be blank)
-    * (Precondition: )
-    */
-    // boolean[][] reservedSeats = new boolean[13][8]; TODO add in caller method. Last row is to check if current loop is working
-    public static boolean[][] findSeatsNear(boolean[][] availableSeats, int columnStart, int columnEnd, int row, int numberOfSeats, boolean[][] reservedSeats){
-    // boolean[][] reservedSeats = new boolean[12][8];
-        // find first sequence of blanks.
-        int matchedSeats = 0;
-        int newColumnStart = 0;
-        int newColumnEnd = 0;
-
-        for(int column = 0; column < 8; column++){ // CURRENTLY HERE
-            if(availableSeats[row][column]){
-                matchedSeats++;
-            }
-            if((!availableSeats[row][column] || (column == 8 && matchedSeats != 0)) &&
-                    column - matchedSeats <= columnStart &&
-                    column >= columnEnd){
-                numberOfSeats -= matchedSeats;
-                if(findSeatsNear(availableSeats, rowStart, rowEnd, row++, numberOfSeats, reservedSeats).length != 0){
-                    return reservedSeats;
+    public static int[] findSeatsGroup(boolean[][] availableSeats, int numberOfSeats, int rowStart, int rowEnd){
+        int openSeats = 0;
+        int endRow = -1;
+        int endColumn = -1;
+        boolean[][] seatsToReserve = new boolean[12][8];
+        // down for odds, up evens
+        for(int row = rowStart; row < rowEnd; row++){
+            for(int column = 0; column < 8; column++){
+                if(row % 2 == 0 && availableSeats[row][column]){
+                    endRow = row;
+                    endColumn = column;
+                    openSeats++;
+                    // System.out.format("down %s\n", openSeats);
+                } else if(row % 2 == 1 && availableSeats[row][8 - column - 1]) {
+                    endRow = row;
+                    endColumn = 8 - column - 1;
+                    openSeats++;
+                    // System.out.format("up %s\n", openSeats);
+                } else {
+                    openSeats = 0;
+                    endRow = -1;
+                    endColumn = -1;
+                    // System.out.format("other %s\n", openSeats);
                 }
-                matchedSeats = 0;
+                if(openSeats == numberOfSeats){
+                    int direction = (row % 2) * 2 - 1; // odd = positive, even = negative
+                    return new int[]{endRow, endColumn, direction};
+                }
             }
         }
-    // delete the number of blanks from numberRemaining
-    // store newRow, newStart
-    // overloaded method for no rowEnds
-
-    return new boolean[0][0]; // TODO fix 
+        openSeats = 0;
+        // System.out.format("transition %s\n", openSeats);
+        // down for evens, up odds
+        for(int row = rowStart; row < rowEnd; row++){
+            for(int column = 0; column < 8; column++){
+                if(row % 2 == 1 && availableSeats[row][column]){
+                    endRow = row;
+                    endColumn = column;
+                    openSeats++;
+                    // System.out.format("up %s\n", openSeats);
+                } else if(row % 2 == 0 && availableSeats[row][8 - column - 1]) {
+                    endRow = row;
+                    endColumn = 8 - column - 1;
+                    openSeats++;
+                    // System.out.format("down %s\n", openSeats);
+                } else {
+                    openSeats = 0;
+                    endRow = -1;
+                    endColumn = -1;
+                    // System.out.format("other %s\n", openSeats);
+                }
+                if(openSeats == numberOfSeats){
+                    int direction = (row % 2) * 2 - 1; // odd = positive, even = negative
+                    return new int[]{endRow, endColumn, direction*-1};
+                }
+            }
+        }
+        return new int[]{-1, -1, 0};
     }
 
     /**
