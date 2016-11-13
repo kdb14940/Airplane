@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -83,6 +84,18 @@ public class ReserveSeats{
         }
     }
 
+    /**
+     * reserves a seat on an airplane
+     * (PostCondition: if vacant, the seat will be reserved with the given name)
+     * @param airplane the given airplane
+     * @param passengers the arraylist of passengers on the plane
+     * @param firstName first name of the passenger
+     * @param lastName last name of the passenger
+     * @param row actual stored row of the seat
+     * @param column actual stored column of the seat
+     * @param output boolean to check if reservation confirmation should be printed for the individual
+     * (PreCondition: the airplane and passengers list is initialized)
+     */
     public static void reserveSeats(Airplane airplane, ArrayList<Passenger> passengers, String firstName, String lastName, int row, int column, boolean output){ // actual stored rows and columns
         if(airplane.getAirplaneSeats()[row][column].isVacant){
             passengers.add(new Passenger(firstName, lastName, row, column)); // adds new passenger to list of passengers
@@ -268,7 +281,7 @@ public class ReserveSeats{
             numberOfSeats = in.nextInt();
             if(numberOfSeats > 96) // if more than 2 rows
                 throw new Exception("Exceeded max input");
-            System.out.println("Would you like a first class seat?");
+            System.out.println("Would you like first class seats?");
             System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
             classChoice = in.nextInt();
         } catch(Exception e){
@@ -337,7 +350,14 @@ public class ReserveSeats{
     }
 
     /**
-    * 
+    * Finds a group of seats that are open
+    * (PostCondition: final row, final column and the direction will be returned in an array)
+    * @param availableSeats vacancy of each seat
+    * @param numberofSeats number of seats to fill in a group
+    * @param rowStart the first row to check
+    * @param rowEnd the last row to check
+    * @return int[] array with the end row, end column, and direction of open seats
+    * (PreCondition: 0 >= rowStart >= 12 , 0 >= rowStart >= 12)
     */
     public static int[] findSeatsGroup(boolean[][] availableSeats, int numberOfSeats, int rowStart, int rowEnd){
         int openSeats = 0;
@@ -401,7 +421,7 @@ public class ReserveSeats{
 
     /**
     * Finds required length of seats together
-    * (Postcondition: boolean[][] and numberOfSeats > 0)
+    * (Postcondition: availableSeats and numberOfSeats > 0)
     * @param availableSeats array of available seats
     * @param numberOfSeats the number of seats requested
     * @return seatsFound int[], 1/0 (true, false), row, column
@@ -421,6 +441,15 @@ public class ReserveSeats{
     }
 
     // same as hasSeats with the exception of stating a starting row
+    /**
+    * Finds required length of seats together
+    * (Postcondition: availableSeats and numberOfSeats > 0)
+    * @param availableSeats array of available seats
+    * @param numberOfSeats the number of seats requested
+    * @param startRow row to start at
+    * @return seatsFound int[], 1/0 (true, false), row, column
+    * (Precondition: returns an int[] of 1/0, row, column)
+    */
     public static int[] hasSeats(boolean[][] availableSeats, int numberOfSeats, int startRow){
         for(int row = startRow; row < availableSeats.length; row++){
             eachColumn: for(int column = 0; column < availableSeats[0].length - numberOfSeats + 1; column++){
@@ -435,6 +464,16 @@ public class ReserveSeats{
     }
 
     // match seats in only one row
+    /**
+    * Finds required length of seats together
+    * (Postcondition: boolean[][] and numberOfSeats > 0)
+    * @param availableSeats array of available seats
+    * @param numberOfSeats the number of seats requested
+    * @param row row that is being checked
+    * @param startColumn column to start the check at
+    * @return seatsFound int[], 1/0 (true, false), row, column
+    * (Precondition: returns an int[] of 1/0, row, column)
+    */
     public static int[] hasSeats(boolean[][] availableSeats, int numberOfSeats, int row, int startColumn){
         if(startColumn + numberOfSeats < 12){
             eachColumn: for(int column = startColumn; column < availableSeats[0].length - numberOfSeats + 1; column++){
