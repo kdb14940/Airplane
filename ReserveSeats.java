@@ -309,6 +309,7 @@ public class ReserveSeats{
                 String firstName = names[0][i];
                 String lastName = names[1][i];
                 reserveSeats(airplane, passengers, firstName, lastName, row, column, false);
+                System.out.format("%s's seat is %s%s.\n", firstName, row + 1, (char)(column+65));
 
                 // row and column logic
                 if(column == 7 && direction == 1){
