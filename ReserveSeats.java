@@ -268,13 +268,22 @@ public class ReserveSeats{
             numberOfSeats = in.nextInt();
             if(numberOfSeats > 96) // if more than 2 rows
                 throw new Exception("Exceeded max input");
+            System.out.println("Would you like a first class seat?");
+            System.out.print("Enter 1 for yes, 0 for no, or 2 for no preference: ");
+            classChoice = in.nextInt();
         } catch(Exception e){
             System.out.println("That was not valid input.");
             System.out.println("No seats were reserved.");
             return;
         }
 
-        int[] seatsFound = findSeatsGroup(availableSeats, numberOfSeats, 0, 4);
+        int[] seatsFound;
+        if(classChoice == 1)
+            seatsFound = findSeatsGroup(availableSeats, numberOfSeats, 0, 4);
+        else if(classChoice == 0)
+            seatsFound = findSeatsGroup(availableSeats, numberOfSeats, 4, 12);
+        else
+            seatsFound = findSeatsGroup(availableSeats, numberOfSeats, 0, 12);
 
         if(seatsFound[0] != -1){
             int row = seatsFound[0];
