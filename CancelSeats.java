@@ -1,3 +1,9 @@
+/**
+ * Cancels seats by either seat number or name
+ * 
+ * @author Addison Chan, Kyle Bascomb
+ * @version 11/05/16
+ */
 import java.util.ArrayList;
 import java.util.Scanner;
 
