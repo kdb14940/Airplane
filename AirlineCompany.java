@@ -98,7 +98,7 @@ public class AirlineCompany {
                 seatsToFill--;
                 String firstName = "John " + seatsToFill;
                 String lastName = "Doe";
-                passengers.add(new Passenger(firstName, lastName, row, column));
+                passengers.add(new Passenger(firstName, lastName, column, row));
                 airplane.setAirplaneSeatName(column, row, firstName, lastName);
             }
             // else do nothing
