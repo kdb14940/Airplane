@@ -1,9 +1,14 @@
 
+/**
+ * Different ways of reserving seats on an airplane
+ * 
+ * @author Addison Chan, Kyle Bascomb
+ * @version 11/05/16
+ */
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ReserveSeats{
-
     /**
      * Reserve seats manually
      * (Postcondition: Reserves seats)
@@ -170,10 +175,11 @@ public class ReserveSeats{
     }
 
     /**
-    * 
-    * (Postcondition: )
-	* @param airplane TODO
-    * (Precondition: )
+    * Allows user to type a sentence and picks a seat for them based on key words 
+    * (Postcondition: Seat is reserved with given parameters)
+	* @param airplane airplane that is being filled
+	* @param passengers list of passengers on the plane
+    * (Precondition: airplane is initialized)
     */
     public static void individualSmartChoice(Airplane airplane, ArrayList<Passenger> passengers){
 
