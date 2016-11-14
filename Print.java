@@ -1,3 +1,9 @@
+/**
+ * Prints lists for passenger info and reserved seats
+ * 
+ * @author Addison Chan, Kyle Bascomb
+ * @version 11/05/16
+ */
 import java.util.ArrayList;
 
 public class Print {
