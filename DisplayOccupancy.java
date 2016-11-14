@@ -1,10 +1,16 @@
 /**
- * Prints out a table of passengers
- * (Postcondition: Prints out table of passengers)
- * @param airplane the airplane
- * (Precondition: Airplane is initialized)
+ * Displays the layout and occupancy of the airplane
+ * 
+ * @author Addison Chan, Kyle Bascomb
+ * @version 11/05/16
  */
 public class DisplayOccupancy{
+   /**
+   * Prints out a table of passengers
+   * (Postcondition: Prints out table of passengers)
+   * @param airplane the airplane
+   * (Precondition: Airplane is initialized)
+   */
     public static void displayOccupancy(Airplane airplane){
 
         int vacant = airplane.getAirplaneSeats().length * airplane.getAirplaneSeats()[0].length; // gets number of seats in an airplane
@@ -41,3 +47,4 @@ public class DisplayOccupancy{
         System.out.println(); // to make newline before prompt again
     }
 }
+
